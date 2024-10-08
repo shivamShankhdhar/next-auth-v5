@@ -33,8 +33,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         password: hashedPassword
       }
     }
-  )
-try {
+  ).then(async (data) => {
+    try {
   const verificationToken = await generateVerificationToken(email)
 
 await sendVerificationEmail(email, verificationToken.token)
@@ -42,4 +42,7 @@ await sendVerificationEmail(email, verificationToken.token)
 } catch (error:any) {
   return { error: error.message };
 }
+  }).catch(err => {
+    return {error:err.message}
+  })
 }
